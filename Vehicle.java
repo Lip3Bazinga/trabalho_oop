@@ -25,24 +25,48 @@ public class Vehicle {
         return plate;
     }
 
+    public void setPlate(String plate) {
+        this.plate = plate;
+    }
+
     public String getBrand() {
         return brand;
+    }
+
+    public void setBrand(String brand) {
+        this.brand = brand;
     }
 
     public String getModel() {
         return model;
     }
 
+    public void setModel(String model) {
+        this.model = model;
+    }
+
     public String getColor() {
         return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
     }
 
     public int getYear() {
         return year;
     }
 
+    public void setYeat(int year) {
+        this.year = year;
+    }
+
     public String getGroup() {
         return group;
+    }
+
+    public void setGroup(String group) {
+        this.group = group;
     }
 
     public String getStatus() {
@@ -55,5 +79,9 @@ public class Vehicle {
 
     protected int getNumberVehicles() {
         return numberVehicles;
+    }
+
+    public void setNumberVehicles(int numberVehicles) {
+        this.numberVehicles = numberVehicles;
     }
 }
