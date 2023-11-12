@@ -1,7 +1,7 @@
-package employeeApp.employeeController.vehicles;
+package managerApp.managerController.vehicles;
 
 public class VehicleRegisterController {
-    
+   
     private String plate;
     private String brand;
     private String model;
