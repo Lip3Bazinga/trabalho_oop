@@ -9,6 +9,7 @@ public class Vehicle {
     private String status;
     private static int numberVehicles = 0;
 
+    // Construtor
     public Vehicle(String plate, String brand, String model, String color, int year, String group, String status) {
         this.plate = plate;
         this.brand = brand;
@@ -24,15 +25,15 @@ public class Vehicle {
         return plate;
     }
 
-    public String getbrand() {
+    public String getBrand() {
         return brand;
     }
 
-    public String getmodel() {
+    public String getModel() {
         return model;
     }
 
-    public String getcolor() {
+    public String getColor() {
         return color;
     }
 
