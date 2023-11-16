@@ -16,6 +16,7 @@ import managerApp.managerController.vehicles.VehicleRegisterController;
 
 public class ModelVehicleRegister {
 
+    //String do caminho absoluto do arquivo de texto "vehicleRegister.txt" a partir do diretorio do projeto (user.dir) e do diretorio database
     String pathVehicleRegister = Paths.get(System.getProperty("user.dir"), "database", "vehicleRegister.txt").toString();
 
     /**
@@ -68,7 +69,7 @@ public class ModelVehicleRegister {
 
         //Le todo o arquivo txt antigo
         while (line != null) {
-            oldContent = oldContent + line + System.lineSeparator();
+            oldContent = oldContent + line + "\n";
             line = reader.readLine();
         }
         reader.close();
