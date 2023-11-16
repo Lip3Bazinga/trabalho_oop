@@ -1,6 +1,6 @@
 package employeeApp.employeeExceptions;
 
-public class ClientAlreadyExistsException extends Excepion {
+public class ClientAlreadyExistsException extends Exception {
 
   private int cpf;
 
