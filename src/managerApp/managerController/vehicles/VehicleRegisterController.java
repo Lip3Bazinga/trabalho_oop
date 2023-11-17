@@ -1,5 +1,8 @@
 package managerApp.managerController.vehicles;
 
+/**
+Classe que registra veículos
+*/
 public class VehicleRegisterController {
    
     private String plate;
