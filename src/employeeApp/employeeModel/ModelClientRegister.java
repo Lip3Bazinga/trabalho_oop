@@ -36,7 +36,7 @@ public class ModelClientRegister {
         if(verifyClientExistence(cpf, clientsArray )) {
             throw new ClientAlreadyExistsException(cpf);   
         }
-
+        
         // Linha que será adicionada ao clientRegister.txt em database
         String clientInTxt = cpf + "\t" + name + "\t" + birthDate + "\t" + email + "\t" + phoneNumber + "\n";
 
