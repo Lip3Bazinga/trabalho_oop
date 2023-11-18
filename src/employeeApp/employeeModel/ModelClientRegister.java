@@ -1,6 +1,5 @@
 package employeeApp.employeeModel;
 
-<<<<<<< HEAD
 import java.util.ArrayList;
 import java.io.FileWriter;
 import java.io.BufferedReader;
@@ -14,8 +13,6 @@ import java.nio.file.Paths;
 import employeeApp.employeeExceptions.ClientAlreadyExistsException;
 import employeeApp.employeeController.clients.ClientRegisterController;
 
-=======
->>>>>>> parent of dc242c8 (Correções Dúzia por falta de compilador)
 public class ModelClientRegister {
 
     //Retorna obj do tipo cliente...
@@ -34,28 +31,28 @@ public class ModelClientRegister {
      * @throws IOException => Falha ao adicionar o cliente no txt adequado
     */
     
-    public void addClient(int cpf, String name, String birthDate, String email, String phoneNumber, ArrayList<clientRegisterController> clientsArray) throws ClientAlreadyExistsException, IOException {
+    public void addClient(int cpf, String name, String birthDate, String email, String phoneNumber, ArrayList<ClientRegisterController> clientsArray) throws ClientAlreadyExistsException, IOException {
 
-        if(verifyClientExistence(cpf, ) {
+        if(verifyClientExistence(cpf, clientsArray)) {
             throw new ClientAlreadyExistsException(cpf);   
         }
 
         // Linha que será adicionada ao clientRegister.txt em database
-        String clientInTxt = cpf + "\t" + name + "\t + birthDate + "\t" + email + "\t + phoneNumber + "\n";
+        String clientInTxt = cpf + "\t" + name + "\t" + birthDate + "\t" + email + "\t" + phoneNumber + "\n";
 
         // Escreve a nova linha de cliente no clientRegister.txt em database
         BufferedWriter writer = new BufferedWriter(new FileWriter(pathClientRegister, true));
         writer.write(clientInTxt);
-        clientsArray.add(new clientRegisterController(cpf, name, birthDate, email, phoneNumber));
+        clientsArray.add(new ClientRegisterController(cpf, name, birthDate, email, phoneNumber));
         writer.close();
     }
     
-    public boolean verifyClientExistence(int cpf, ArrayList<clientRegisterController> clientsArray){
-        for(int i = 0; i < vehiclesArray.size(); i++){
-            if(clientsArray.get(i).getCpf().equals(cpf))
-                return true
+    public boolean verifyClientExistence(int cpf, ArrayList<ClientRegisterController> clientsArray){
+        for(int i = 0; i < clientsArray.size(); i++){
+            if(clientsArray.get(i).getCpf() == cpf)
+                return true;
         }
-        return false
+        return false;
     }
     
 }
