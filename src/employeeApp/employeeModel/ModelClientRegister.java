@@ -1,19 +1,23 @@
 package employeeApp.employeeModel;
 
-import java.io.BufferedWriter;
+import java.util.ArrayList;
 import java.io.FileWriter;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
-import employeeApp.employeeController.clients.ClientRegisterController;
 import employeeApp.employeeExceptions.ClientAlreadyExistsException;
+import employeeApp.employeeController.clients.ClientRegisterController;
 
 public class ModelClientRegister {
 
     //Retorna obj do tipo cliente...
 
-    String pathclientRegister = Paths.get(System.getProperty("user.dir"), "database", "clientRegister.txt").toString();
+    String pathClientRegister = Paths.get(System.getProperty("user.dir"), "database", "clientRegister.txt").toString();
 
     /**
      * Método que adiciona um cliente no clientRegister.txt e instancia um novo objeto no array
@@ -37,7 +41,7 @@ public class ModelClientRegister {
         String clientInTxt = cpf + "\t" + name + "\t" + birthDate + "\t" + email + "\t" + phoneNumber + "\n";
 
         // Escreve a nova linha de cliente no clientRegister.txt em database
-        BufferedWriter writer = new BufferedWriter(new FileWriter(pathclientRegister, true));
+        BufferedWriter writer = new BufferedWriter(new FileWriter(pathClientRegister, true));
         writer.write(clientInTxt);
         clientsArray.add(new ClientRegisterController(cpf, name, birthDate, email, phoneNumber));
         writer.close();
