@@ -33,7 +33,7 @@ public class ModelClientRegister {
     
     public void addClient(int cpf, String name, String birthDate, String email, String phoneNumber, ArrayList<ClientRegisterController> clientsArray) throws ClientAlreadyExistsException, IOException {
 
-        if(verifyClientExistence(cpf, clientsArray)) {
+        if(verifyClientExistence(cpf, clientsArray )) {
             throw new ClientAlreadyExistsException(cpf);   
         }
 
