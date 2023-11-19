@@ -1,12 +1,14 @@
 package managerApp.managerView;
 
-import managerApp.managerModel.*;
-
 import java.io.IOException;
 import java.util.ArrayList;
-import managerApp.managerController.vehicles.VehicleRegisterController;
 import java.util.Scanner;
-import managerApp.managerExceptions.*;
+
+import managerApp.managerController.vehicles.VehicleRegisterController;
+import managerApp.managerExceptions.VehicleAlreadyExistsException;
+import managerApp.managerExceptions.VehicleDoesNotExistException;
+import managerApp.managerModel.ModelVehicleRegister;
+
 public class MainManager {
     public static void main(String args[]) {
 

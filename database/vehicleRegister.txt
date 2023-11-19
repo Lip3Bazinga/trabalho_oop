@@ -1,5 +1,0 @@
-1) Grupo do carro radio buutton ou select option
-2) Input type number
-3) Motivo exclusão: radio button or select option
-4) Gerar estatísticas: select option
-5) Parâmetros operacionais
