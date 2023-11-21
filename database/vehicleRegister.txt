@@ -1,0 +1,2 @@
+ABC1234	Fiat	Argo	Preto	2013	Basico	indisponivel - furto
+ANE3052	Toyota	Corolla	Branco	2019	Premium	disponivel

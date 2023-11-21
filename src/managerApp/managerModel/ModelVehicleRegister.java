@@ -5,13 +5,13 @@ import java.io.FileWriter;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Paths;
 
 import managerApp.managerExceptions.VehicleAlreadyExistsException;
 import managerApp.managerExceptions.VehicleDoesNotExistException;
+import managerApp.managerExceptions.WithoutPermissionException;
 import managerApp.managerController.vehicles.VehicleRegisterController;
 
 public class ModelVehicleRegister {
@@ -29,9 +29,9 @@ public class ModelVehicleRegister {
      * @param group Grupo do veiculo
      * @param vehiclesArray Local onde estao sendo armazenadas as instancias dos veiculos
      * @throws VehicleAlreadyExistsException Veiculo ja existe no sistema
-     * @throws IOException Falha ao adicionar o veiculo no txt adequado
+     * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
      */
-    public void addVehicle(String plate, String brand, String model, String color, int year, String group, ArrayList<VehicleRegisterController> vehiclesArray) throws VehicleAlreadyExistsException, IOException {
+    public void addVehicle(String plate, String brand, String model, String color, int year, String group, ArrayList<VehicleRegisterController> vehiclesArray) throws VehicleAlreadyExistsException, WithoutPermissionException {
         
         //Verifica se o veiculo ja existe
         if(verifyVehicleExistence(plate, vehiclesArray)) {
@@ -41,11 +41,16 @@ public class ModelVehicleRegister {
         //Linha que sera adicionada ao txt de database
         String vehicleInTxt = plate + "\t" + brand + "\t" + model + "\t" + color + "\t" + year + "\t" + group + "\t" + "disponivel" + "\n";
         
-        //Escreve a nova linha do veiculo no txt de database
-        BufferedWriter writer = new BufferedWriter(new FileWriter(pathVehicleRegister, true));
-        writer.write(vehicleInTxt);
-        vehiclesArray.add(new VehicleRegisterController(plate, brand, model, color, year, group, "disponivel"));
-        writer.close();
+        //Escreve a nova linha do veiculo no txt de database, caso ele nao exista tambem cria o arquivo txt
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(pathVehicleRegister, true));
+            writer.write(vehicleInTxt);
+            vehiclesArray.add(new VehicleRegisterController(plate, brand, model, color, year, group, "disponivel"));
+            writer.close();
+        } catch(IOException e) {          //O arquivo nao pode ser criado (nao ha permissao de acesso)
+            throw new WithoutPermissionException();
+        }
+
     }
 
     /**
@@ -54,41 +59,44 @@ public class ModelVehicleRegister {
      * @param plate Placa do veiculo a ser excluido
      * @param vehiclesArray Local onde estao sendo armazenadas as instancias dos veiculos
      * @throws VehicleDoesNotExistException Veiculo nao existe no sistema
-     * @throws FileNotFoundException Falha ao encontrar o arquivo txt dos veiculos
-     * @throws IOException Falha ao adicionar o veiculo no txt adequado
+     * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
      */
-    public void removeVehicle(String reason, String plate, ArrayList<VehicleRegisterController> vehiclesArray) throws VehicleDoesNotExistException, FileNotFoundException, IOException {
+    public void removeVehicle(String reason, String plate, ArrayList<VehicleRegisterController> vehiclesArray) throws VehicleDoesNotExistException, WithoutPermissionException {
 
         //Posicao do veiculo a ser removido no array
         int positionInArray = getPositionVehicleInArrayByPlate(plate, vehiclesArray);
 
-        File vehicleRegister = new File(pathVehicleRegister);
-        String oldContent = "";
-        BufferedReader reader = new BufferedReader(new FileReader(vehicleRegister));
-        String line = reader.readLine();
+        try {
+            File vehicleRegister = new File(pathVehicleRegister);
+            String oldContent = "";
+            BufferedReader reader = new BufferedReader(new FileReader(vehicleRegister));
+            String line = reader.readLine();
 
-        //Le todo o arquivo txt antigo
-        while (line != null) {
-            oldContent = oldContent + line + "\n";
-            line = reader.readLine();
+            //Le todo o arquivo txt antigo
+            while (line != null) {
+                oldContent = oldContent + line + "\n";
+                line = reader.readLine();
+            }
+            reader.close();
+
+            //Linha do carro a ser excluido atualizada para o txt
+            String newCarRegister = vehiclesArray.get(positionInArray).getPlate() + "\t" + vehiclesArray.get(positionInArray).getBrand() + 
+                                    "\t" + vehiclesArray.get(positionInArray).getModel() + "\t" + vehiclesArray.get(positionInArray).getColor() + "\t" + 
+                                    vehiclesArray.get(positionInArray).getYear() + "\t" + vehiclesArray.get(positionInArray).getGroup() + "\t" + 
+                                    "indisponivel - " + reason + "\n";
+
+            //String que sera adicionada ao txt no lugar do texto antigo
+            String newContent = oldContent.replaceAll(vehiclesArray.get(positionInArray).toString() + "\n", newCarRegister);
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter(pathVehicleRegister));
+            writer.write(newContent);
+            writer.close();
+
+            //Muda status do veiculo no array
+            vehiclesArray.get(positionInArray).setStatus("indisponivel - " + reason);
+        } catch(IOException e) {          //O arquivo nao pode ser criado (nao ha permissao de acesso)
+            throw new WithoutPermissionException();
         }
-        reader.close();
-
-        //Linha do carro a ser excluido atualizada para o txt
-        String newCarRegister = vehiclesArray.get(positionInArray).getPlate() + "\t" + vehiclesArray.get(positionInArray).getBrand() + 
-                                "\t" + vehiclesArray.get(positionInArray).getModel() + "\t" + vehiclesArray.get(positionInArray).getColor() + "\t" + 
-                                vehiclesArray.get(positionInArray).getYear() + "\t" + vehiclesArray.get(positionInArray).getGroup() + "\t" + 
-                                "indisponivel - " + reason + "\n";
-
-        //String que sera adicionada ao txt no lugar do texto antigo
-        String newContent = oldContent.replaceAll(vehiclesArray.get(positionInArray).toString() + "\n", newCarRegister);
-
-        BufferedWriter writer = new BufferedWriter(new FileWriter(pathVehicleRegister));
-        writer.write(newContent);
-        writer.close();
-
-        //Muda status do veiculo no array
-        vehiclesArray.get(positionInArray).setStatus("indisponivel - " + reason);
     }
 
     /**
@@ -123,5 +131,38 @@ public class ModelVehicleRegister {
         }
         return false;
     }
-    
+
+    /**
+     *  Metodo utilizado para inicializar o array de veiculos ao abrir o aplicativo com os dados do txt
+     * @return Retorna o array de veiculos com os dados do txt
+     * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
+     */
+    public ArrayList<VehicleRegisterController> initializeVehicles() throws WithoutPermissionException{
+
+        try {
+            File vehicleRegister = new File(pathVehicleRegister);
+            BufferedReader reader = new BufferedReader(new FileReader(vehicleRegister));
+            String line = reader.readLine();
+            String elements[];
+
+            ArrayList<VehicleRegisterController> vehiclesArray = new ArrayList<>();;
+            VehicleRegisterController vehicle;
+
+            //Le todo o arquivo txt antigo
+            while (line != null) {
+                elements = line.split("\t");
+                for(int i = 0; i < elements.length; i++) {
+                    vehicle = new VehicleRegisterController(elements[0], elements[1], elements[2], elements[3], Integer.parseInt(elements[4]), elements[5], elements[6]);
+                    vehiclesArray.add(vehicle);
+                }
+
+                line = reader.readLine();
+            }
+            reader.close();
+
+            return vehiclesArray;
+        } catch(IOException e) {          //O arquivo nao pode ser criado (nao ha permissao de acesso)
+            throw new WithoutPermissionException();
+        }
+    }
 }
