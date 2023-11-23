@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 
 import managerApp.managerExceptions.WithoutPermissionException;
+import managerApp.managerExceptions.NotPostiveNumberException;
 
 public class ModelOperationalParameters {
 
@@ -52,7 +53,7 @@ public class ModelOperationalParameters {
      * @param dailyValue Novo valor da diaria
      * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
      */
-    public void setDailyValue(String group, double dailyValue) throws WithoutPermissionException {
+    public void setDailyValue(String group, double dailyValue) throws NotPostiveNumberException, WithoutPermissionException {
 
         try {
             File operationalParameters = new File(pathOperationalParameters);
@@ -88,7 +89,7 @@ public class ModelOperationalParameters {
             BufferedWriter writer = new BufferedWriter(new FileWriter(pathOperationalParameters));
             writer.write(newContent);
             writer.close();
-        
+
         } catch(IOException e) {          //O arquivo nao pode ser criado (nao ha permissao de acesso)
             throw new WithoutPermissionException();
         }
@@ -100,7 +101,7 @@ public class ModelOperationalParameters {
      * @param tankValue Novo valor do tanque
      * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
      */
-    public void setTankValue(String group, double tankValue) throws WithoutPermissionException {
+    public void setTankValue(String group, double tankValue) throws NotPostiveNumberException, WithoutPermissionException {
 
         try {
             File operationalParameters = new File(pathOperationalParameters);
@@ -148,7 +149,7 @@ public class ModelOperationalParameters {
      * @param externalCleaningPrice Novo valor da limpeza externa
      * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
      */
-    public void setExternalCleaningPrice(String group, double externalCleaningPrice) throws WithoutPermissionException {
+    public void setExternalCleaningPrice(String group, double externalCleaningPrice) throws NotPostiveNumberException, WithoutPermissionException {
 
         try {
             File operationalParameters = new File(pathOperationalParameters);
@@ -196,7 +197,7 @@ public class ModelOperationalParameters {
      * @param internalCleaningPrice Novo valor da limpeza interna
      * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
      */
-    public void setInternalCleaningPrice(String group, double internalCleaningPrice) throws WithoutPermissionException {
+    public void setInternalCleaningPrice(String group, double internalCleaningPrice) throws NotPostiveNumberException, WithoutPermissionException {
 
         try {
             File operationalParameters = new File(pathOperationalParameters);
@@ -243,7 +244,7 @@ public class ModelOperationalParameters {
      * @param insuranceDailyValue Novo valor da diaria do seguro
      * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
      */
-    public void setInsuranceDailyValue(String group, double insuranceDailyValue) throws WithoutPermissionException {
+    public void setInsuranceDailyValue(String group, double insuranceDailyValue) throws NotPostiveNumberException, WithoutPermissionException {
 
         try {
             File operationalParameters = new File(pathOperationalParameters);

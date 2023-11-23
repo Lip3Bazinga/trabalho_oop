@@ -3,10 +3,11 @@ package managerApp;
 import java.util.Scanner;
 
 import managerApp.managerModel.ModelOperationalParameters;
+import managerApp.managerExceptions.NotPostiveNumberException;
 import managerApp.managerExceptions.WithoutPermissionException;
 
 public class MainManager {
-    public static void main(String args[]) {
+    public static void main(String args[]) throws NotPostiveNumberException {
 
         ModelOperationalParameters mop = new ModelOperationalParameters();
         Scanner sc = new Scanner(System.in);

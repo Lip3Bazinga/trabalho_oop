@@ -16,6 +16,12 @@ import managerApp.managerController.vehicles.VehicleRegisterController;
 
 public class ModelVehicleRegister {
 
+    private VehicleRegisterController vehicleRegisterController;
+
+    public ModelVehicleRegister() {
+        this.vehicleRegisterController = vehicleRegisterController;
+    }
+
     //String do caminho absoluto do arquivo de texto "vehicleRegister.txt" a partir do diretorio do projeto (user.dir) e do diretorio database
     String pathVehicleRegister = Paths.get(System.getProperty("user.dir"), "database", "vehicleRegister.txt").toString();
 
@@ -99,39 +105,14 @@ public class ModelVehicleRegister {
         }
     }
 
-    /**
-     * Metodo que encontra a posicao do veiculo no ArrayList onde eles estao armazenados
-     * @param plate Placa do veiculo a ser encontrado
-     * @param vehiclesArray Local onde estao sendo armazenados os veiculos
-     * @return Posicao do veiculo em "vehiclesArray"
-     * @throws VehicleDoesNotExistException Veiculo nao existe em "vehiclesArray"
-     */
     public int getPositionVehicleInArrayByPlate(String plate, ArrayList<VehicleRegisterController> vehiclesArray) throws VehicleDoesNotExistException {
-        
-        for(int i = 0; i < vehiclesArray.size(); i++) {
-            if(vehiclesArray.get(i).getPlate().equals(plate)) {
-                return i;
-            }
-        }
-        throw new VehicleDoesNotExistException(plate);
+        return vehicleRegisterController.getPositionVehicleInArrayByPlate(plate, vehiclesArray);
     }
 
-    /**
-     * Verifica a existencia de um veiculo em um ArrayList
-     * @param plate Placa do veiculo
-     * @param vehiclesArray ArrayList onde o veiculo sera buscado
-     * @return "true" se o veiculo existe no ArrayList, ou "false" caso contrario
-     */
     public boolean verifyVehicleExistence(String plate, ArrayList<VehicleRegisterController> vehiclesArray) {
-        
-        for(int i = 0; i < vehiclesArray.size(); i++) {
-            if(vehiclesArray.get(i).getPlate().equals(plate)) {
-                return true;
-            }
-        }
-        return false;
+        return vehicleRegisterController.verifyVehicleExistence(plate, vehiclesArray);
     }
-
+    
     /**
      *  Metodo utilizado para inicializar o array de veiculos ao abrir o aplicativo com os dados do txt
      * @return Retorna o array de veiculos com os dados do txt
