@@ -262,7 +262,7 @@ public class VehicleRegisterController {
      * @param vehiclesArray ArrayList onde o veiculo sera buscado
      * @return "true" se o veiculo existe no ArrayList, ou "false" caso contrario
      */
-    public boolean verifyVehicleExistence(String plate, ArrayList<VehicleRegisterController> vehiclesArray) {
+    public static boolean verifyVehicleExistence(String plate, ArrayList<VehicleRegisterController> vehiclesArray) {
         
         for(int i = 0; i < vehiclesArray.size(); i++) {
             if(vehiclesArray.get(i).getPlate().equals(plate)) {
