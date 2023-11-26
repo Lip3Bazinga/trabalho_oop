@@ -7,12 +7,12 @@ import java.awt.event.*;
 import managerApp.managerView.UI.Button;
 import managerApp.managerView.UI.ConfirmationModal;
 
-public class Main extends JFrame {
+public class Screen extends JFrame {
 
     private static final int FIXED_WIDTH = 1200;
     private static final int FIXED_HEIGHT = 700;
 
-    public Main() {
+    public Screen() {
         createUI();
     }
 
@@ -39,29 +39,29 @@ public class Main extends JFrame {
         cadastrarButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(Main.this, "Botão Cadastrar Pressionado");
+                JOptionPane.showMessageDialog(Screen.this, "Botão Cadastrar Pressionado");
             }
         });
 
         excluirButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(Main.this, "Botão Excluir Pressionado");
-                ConfirmationModal confirmationModal = new ConfirmationModal(Main.this, "Confirmação", "Informe a placa do veículo a ser excluído:");
+                JOptionPane.showMessageDialog(Screen.this, "Botão Excluir Pressionado");
+                ConfirmationModal confirmationModal = new ConfirmationModal(Screen.this, "Confirmação", "Informe a placa do veículo a ser excluído:");
             }
         });
 
         relatorioButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(Main.this, "Botão Gerar Relatório Pressionado");
+                JOptionPane.showMessageDialog(Screen.this, "Botão Gerar Relatório Pressionado");
             }
         });
 
         alterarParametrosButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                //JOptionPane.showMessageDialog(Main.this, "Botão Alterar Parâmetros Pressionado");
+                //JOptionPane.showMessageDialog(Screen.this, "Botão Alterar Parâmetros Pressionado");
             }
         });
 
@@ -82,6 +82,6 @@ public class Main extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(() -> new Main());
+        SwingUtilities.invokeLater(() -> new Screen());
     }
 }

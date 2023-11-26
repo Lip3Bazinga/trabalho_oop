@@ -5,13 +5,13 @@ import javax.swing.SwingUtilities;
 
 import managerApp.managerController.vehicles.VehicleRegisterController;
 import managerApp.managerExceptions.NotPostiveNumberException;
-import managerApp.managerView.Main;
+import managerApp.managerView.Screen;
 // import managerApp.managerExceptions.WithoutPermissionException;
 
 public class MainManager {
     public static void main(String args[]) throws NotPostiveNumberException {
 
-        SwingUtilities.invokeLater(Main::new);
+        SwingUtilities.invokeLater(Screen::new);
 
         // ModelOperationalParameters mop = new ModelOperationalParameters();
         // Scanner sc = new Scanner(System.in);
