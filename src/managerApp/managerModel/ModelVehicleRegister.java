@@ -12,15 +12,9 @@ import java.nio.file.Paths;
 import managerApp.managerExceptions.VehicleAlreadyExistsException;
 import managerApp.managerExceptions.VehicleDoesNotExistException;
 import managerApp.managerExceptions.WithoutPermissionException;
-import managerApp.managerController.vehicles.VehicleRegisterController;
+import managerApp.managerController.vehicles.Vehicle;
 
 public class ModelVehicleRegister {
-
-    private VehicleRegisterController vehicleRegisterController;
-
-    public ModelVehicleRegister() {
-        this.vehicleRegisterController = vehicleRegisterController;
-    }
 
     //String do caminho absoluto do arquivo de texto "vehicleRegister.txt" a partir do diretorio do projeto (user.dir) e do diretorio database
     String pathVehicleRegister = Paths.get(System.getProperty("user.dir"), "database", "vehicleRegister.txt").toString();
@@ -37,12 +31,7 @@ public class ModelVehicleRegister {
      * @throws VehicleAlreadyExistsException Veiculo ja existe no sistema
      * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
      */
-    public void addVehicle(String plate, String brand, String model, String color, int year, String group, ArrayList<VehicleRegisterController> vehiclesArray) throws VehicleAlreadyExistsException, WithoutPermissionException {
-        
-        //Verifica se o veiculo ja existe
-        if(verifyVehicleExistence(plate, vehiclesArray)) {
-            throw new VehicleAlreadyExistsException(plate);
-        }
+    public void addVehicle(String plate, String brand, String model, String color, int year, String group, ArrayList<Vehicle> vehiclesArray) throws VehicleAlreadyExistsException, WithoutPermissionException {
 
         //Linha que sera adicionada ao txt de database
         String vehicleInTxt = plate + "\t" + brand + "\t" + model + "\t" + color + "\t" + year + "\t" + group + "\t" + "disponivel" + "\n";
@@ -51,7 +40,7 @@ public class ModelVehicleRegister {
         try {
             BufferedWriter writer = new BufferedWriter(new FileWriter(pathVehicleRegister, true));
             writer.write(vehicleInTxt);
-            vehiclesArray.add(new VehicleRegisterController(plate, brand, model, color, year, group, "disponivel"));
+            vehiclesArray.add(new Vehicle(plate, brand, model, color, year, group, "disponivel"));
             writer.close();
         } catch(IOException e) {          //O arquivo nao pode ser criado (nao ha permissao de acesso)
             throw new WithoutPermissionException();
@@ -64,13 +53,11 @@ public class ModelVehicleRegister {
      * @param reason Motivo da exclusao do veiculo
      * @param plate Placa do veiculo a ser excluido
      * @param vehiclesArray Local onde estao sendo armazenadas as instancias dos veiculos
+     * @param positionInArray Posicao do veiculo no array
      * @throws VehicleDoesNotExistException Veiculo nao existe no sistema
      * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
      */
-    public void removeVehicle(String reason, String plate, ArrayList<VehicleRegisterController> vehiclesArray) throws VehicleDoesNotExistException, WithoutPermissionException {
-
-        //Posicao do veiculo a ser removido no array
-        int positionInArray = getPositionVehicleInArrayByPlate(plate, vehiclesArray);
+    public void removeVehicle(String reason, String plate, ArrayList<Vehicle> vehiclesArray, int positionInArray) throws VehicleDoesNotExistException, WithoutPermissionException {
 
         try {
             File vehicleRegister = new File(pathVehicleRegister);
@@ -104,21 +91,13 @@ public class ModelVehicleRegister {
             throw new WithoutPermissionException();
         }
     }
-
-    public int getPositionVehicleInArrayByPlate(String plate, ArrayList<VehicleRegisterController> vehiclesArray) throws VehicleDoesNotExistException {
-        return vehicleRegisterController.getPositionVehicleInArrayByPlate(plate, vehiclesArray);
-    }
-
-    public boolean verifyVehicleExistence(String plate, ArrayList<VehicleRegisterController> vehiclesArray) {
-        return vehicleRegisterController.verifyVehicleExistence(plate, vehiclesArray);
-    }
     
     /**
      *  Metodo utilizado para inicializar o array de veiculos ao abrir o aplicativo com os dados do txt
      * @return Retorna o array de veiculos com os dados do txt
      * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
      */
-    public ArrayList<VehicleRegisterController> initializeVehicles() throws WithoutPermissionException{
+    public ArrayList<Vehicle> initializeVehicles() throws WithoutPermissionException {
 
         try {
             File vehicleRegister = new File(pathVehicleRegister);
@@ -126,14 +105,14 @@ public class ModelVehicleRegister {
             String line = reader.readLine();
             String elements[];
 
-            ArrayList<VehicleRegisterController> vehiclesArray = new ArrayList<>();;
-            VehicleRegisterController vehicle;
+            ArrayList<Vehicle> vehiclesArray = new ArrayList<>();;
+            Vehicle vehicle;
 
             //Le todo o arquivo txt antigo
             while (line != null) {
                 elements = line.split("\t");
                 for(int i = 0; i < elements.length; i++) {
-                    vehicle = new VehicleRegisterController(elements[0], elements[1], elements[2], elements[3], Integer.parseInt(elements[4]), elements[5], elements[6]);
+                    vehicle = new Vehicle(elements[0], elements[1], elements[2], elements[3], Integer.parseInt(elements[4]), elements[5], elements[6]);
                     vehiclesArray.add(vehicle);
                 }
 

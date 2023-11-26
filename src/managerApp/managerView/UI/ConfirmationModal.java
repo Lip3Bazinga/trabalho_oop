@@ -10,7 +10,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
-import java.util.ArrayList;
 
 public class ConfirmationModal extends JDialog {
 
@@ -76,8 +75,8 @@ public class ConfirmationModal extends JDialog {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String plateText = plateTextField.getText();
-                ArrayList<VehicleRegisterController> vehiclesArray = MainManager.getVehiclesArray();
-                boolean isValid = VehicleRegisterController.verifyVehicleExistence(plateText, vehiclesArray);
+
+                boolean isValid = VehicleRegisterController.verifyVehicleExistence(plateText, MainManager.getVehicleArray());
 
                 if (isValid) {
                     JOptionPane.showMessageDialog(ConfirmationModal.this, "Placa válida! Confirmação bem-sucedida");

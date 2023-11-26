@@ -16,91 +16,6 @@ Classe que registra veículos
 */
 public class VehicleRegisterController {
    
-    // Atributos
-    private String plate;
-    private String brand;
-    private String model;
-    private String color;
-    private int year;
-    private String group;
-    private String status;
-
-    // Construtor
-    public VehicleRegisterController(String plate, String brand, String model, String color, int year, String group, String status) {
-
-        this.plate = plate;
-        this.brand = brand;
-        this.model = model;
-        this.color = color;
-        this.year = year;
-        this.group = group;
-        this.status = status;
-    }
-
-    /**
-     * Metodo que obtem a placa do veiculo
-     * @return Placa do veiculo
-     */
-    public String getPlate() {
-        return plate;
-    }
-
-    /**
-     * Metodo que obtem a marca do veiculo
-     * @return Marca do veiculo
-     */
-    public String getBrand() {
-        return brand;
-    }
-
-    /**
-     * Metodo que obtem o modelo do veiculo
-     * @return Modelo do veiculo
-     */
-    public String getModel() {
-        return model;
-    }
-
-    /**
-     * Metodo que obtem a cor do veiculo
-     * @return Cor do veiculo
-     */
-    public String getColor() {
-        return color;
-    }
-
-    /**
-     * Metodo que obtem o ano do veiculo
-     * @return Ano do veiculo
-     */
-    public int getYear() {
-        return year;
-    }
-
-    /**
-     * Metodo que obtem o grupo do veiculo
-     * @return Grupo do veiculo
-     */
-    public String getGroup() {
-        return group;
-    }
-
-    /**
-     * Metodo que obtem o status do veiculo
-     * @return Status do veiculo
-     */
-    public String getStatus() {
-        return status;
-    }
-
-    /**
-     * Metodo que altera o status do veiculo
-     * @param status Novo status do veiculo
-     */
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
     /**
      * Metodo que após validar o tamanho da placa, a formatacao da placa e o ano do veiculo, adiciona um veiculo ao sistema 
      * @param plate Placa do veiculo
@@ -116,7 +31,7 @@ public class VehicleRegisterController {
      * @throws VehicleAlreadyExistsException Veiculo ja existe no sistema
      * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
      */
-    public void addVehicle(String plate, String brand, String model, String color, int year, String group, ArrayList<VehicleRegisterController> vehicleArray) throws InvalidPlateSizeException, InvalidPlateFormattingException, InvalidYearException, VehicleAlreadyExistsException, WithoutPermissionException {
+    public void addVehicle(String plate, String brand, String model, String color, int year, String group, ArrayList<Vehicle> vehicleArray) throws InvalidPlateSizeException, InvalidPlateFormattingException, InvalidYearException, VehicleAlreadyExistsException, WithoutPermissionException {
         try {
             validatePlateSize(plate);
             validatePlateFormatting(plate);
@@ -186,15 +101,16 @@ public class VehicleRegisterController {
      * @throws VehicleDoesNotExistException Veiculo nao existe no sistema
      * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
      */
-    public void removeVehicle(String reason, String plate, ArrayList<VehicleRegisterController> vehicleArray) throws InvalidPlateSizeException, InvalidPlateFormattingException, LeasedVehicleException, VehicleDoesNotExistException, WithoutPermissionException {
+    public void removeVehicle(String reason, String plate, ArrayList<Vehicle> vehicleArray) throws InvalidPlateSizeException, InvalidPlateFormattingException, LeasedVehicleException, VehicleDoesNotExistException, WithoutPermissionException {
         try {
 
             validatePlateSize(plate);
             validatePlateFormatting(plate);
             validateVehicleStatus(plate, vehicleArray);
+            int positionInArray = getPositionVehicleInArrayByPlate(plate, vehicleArray);
 
             ModelVehicleRegister modelVehicleRegister = new ModelVehicleRegister();
-            modelVehicleRegister.removeVehicle(reason, plate, vehicleArray);
+            modelVehicleRegister.removeVehicle(reason, plate, vehicleArray, positionInArray);
         } catch(InvalidPlateSizeException ipse) {
             throw ipse;
         } catch(InvalidPlateFormattingException ipfe) {
@@ -215,8 +131,8 @@ public class VehicleRegisterController {
      * @param vehicleArray Local onde estao sendo armazenados as instancias dos veiculos
      * @throws LeasedVehicleException Veiculo esta alugado
      */
-   private void validateVehicleStatus(String plate, ArrayList<VehicleRegisterController> vehicleArray) throws LeasedVehicleException {
-        for(VehicleRegisterController vehicle : vehicleArray) {            
+   private void validateVehicleStatus(String plate, ArrayList<Vehicle> vehicleArray) throws LeasedVehicleException {
+        for(Vehicle vehicle : vehicleArray) {            
             if(vehicle.getPlate().equals(plate)) {
                 // String status = vehicle.getStatus().toLowerCase();
                 if(vehicle.getStatus().equals("alugado")) {
@@ -231,7 +147,7 @@ public class VehicleRegisterController {
      * @return ArrayList com os veiculos cadastrados
      * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
      */
-    public ArrayList<VehicleRegisterController> initializeVehicles() throws WithoutPermissionException {
+    public ArrayList<Vehicle> initializeVehicles() throws WithoutPermissionException {
         try {
             ModelVehicleRegister modelVehicleRegister = new ModelVehicleRegister();
             return modelVehicleRegister.initializeVehicles();
@@ -247,7 +163,7 @@ public class VehicleRegisterController {
      * @return Posicao do veiculo em "vehiclesArray"
      * @throws VehicleDoesNotExistException Veiculo nao existe em "vehiclesArray"
      */
-    public int getPositionVehicleInArrayByPlate(String plate, ArrayList<VehicleRegisterController> vehiclesArray) throws VehicleDoesNotExistException {
+    public static int getPositionVehicleInArrayByPlate(String plate, ArrayList<Vehicle> vehiclesArray) throws VehicleDoesNotExistException {
         for(int i = 0; i < vehiclesArray.size(); i++) {
             if(vehiclesArray.get(i).getPlate().equals(plate)) {
                 return i;
@@ -262,7 +178,7 @@ public class VehicleRegisterController {
      * @param vehiclesArray ArrayList onde o veiculo sera buscado
      * @return "true" se o veiculo existe no ArrayList, ou "false" caso contrario
      */
-    public static boolean verifyVehicleExistence(String plate, ArrayList<VehicleRegisterController> vehiclesArray) {
+    public static boolean verifyVehicleExistence(String plate, ArrayList<Vehicle> vehiclesArray) {
         
         for(int i = 0; i < vehiclesArray.size(); i++) {
             if(vehiclesArray.get(i).getPlate().equals(plate)) {
