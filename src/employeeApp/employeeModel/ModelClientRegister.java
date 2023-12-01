@@ -11,8 +11,6 @@ import employeeApp.employeeController.clients.Client;
 
 public class ModelClientRegister {
 
-    //Retorna obj do tipo cliente...
-
     String pathClientRegister = Paths.get(System.getProperty("user.dir"), "database", "clientRegister.txt").toString();
 
     /**
