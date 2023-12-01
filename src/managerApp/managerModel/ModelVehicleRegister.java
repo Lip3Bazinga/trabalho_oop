@@ -111,11 +111,8 @@ public class ModelVehicleRegister {
             //Le todo o arquivo txt antigo
             while (line != null) {
                 elements = line.split("\t");
-                for(int i = 0; i < elements.length; i++) {
-                    vehicle = new Vehicle(elements[0], elements[1], elements[2], elements[3], Integer.parseInt(elements[4]), elements[5], elements[6]);
-                    vehiclesArray.add(vehicle);
-                }
-
+                vehicle = new Vehicle(elements[0], elements[1], elements[2], elements[3], Integer.parseInt(elements[4]), elements[5], elements[6]);
+                vehiclesArray.add(vehicle);
                 line = reader.readLine();
             }
             reader.close();

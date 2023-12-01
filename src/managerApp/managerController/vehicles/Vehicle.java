@@ -86,4 +86,8 @@ public class Vehicle {
     public void setStatus(String status) {
         this.status = status;
     }
+
+    public String toString() {
+        return plate + '\t' + brand + '\t' + model + '\t' + color + '\t' + year + '\t' + group + '\t' + status;
+    }
 }

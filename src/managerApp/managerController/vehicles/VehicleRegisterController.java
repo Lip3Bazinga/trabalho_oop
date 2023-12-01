@@ -32,6 +32,11 @@ public class VehicleRegisterController {
      * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
      */
     public void addVehicle(String plate, String brand, String model, String color, int year, String group, ArrayList<Vehicle> vehicleArray) throws InvalidPlateSizeException, InvalidPlateFormattingException, InvalidYearException, VehicleAlreadyExistsException, WithoutPermissionException {
+     
+        if(verifyVehicleExistence(plate, vehicleArray)) {
+            throw new VehicleAlreadyExistsException(plate);
+        }
+        
         try {
             validatePlateSize(plate);
             validatePlateFormatting(plate);
@@ -45,8 +50,6 @@ public class VehicleRegisterController {
             throw ipfe;
         } catch(InvalidYearException iye) {
             throw iye;
-        } catch(VehicleAlreadyExistsException vaee) {
-            throw vaee;
         } catch(WithoutPermissionException wpe) {
             throw wpe;
         }
@@ -70,8 +73,8 @@ public class VehicleRegisterController {
      * @param plate Placa do veiculo
      * @throws InvalidPlateFormattingException Formatacao da placa invalido
      */
-    private void validatePlateFormatting(String plate) throws InvalidPlateFormattingException {
-        if(!plate.matches("[A-Za-z]{3}[0-9][A-Za-z][0-9]{2}")) {
+    public void validatePlateFormatting(String plate) throws InvalidPlateFormattingException {
+        if(!plate.matches("[A-Z]{3}[0-9][A-Z][0-9]{2}")) {
             throw new InvalidPlateFormattingException(plate);
         // LLL N L NN
         // 123 4 5 67
@@ -85,7 +88,7 @@ public class VehicleRegisterController {
      * @throws InvalidYearException Ano invalido
      */
     private void validateYear(int year) throws InvalidYearException {
-        if(year < 1886 || year > 2023) {
+        if(year < 1886 || year > 2024) {
             throw new InvalidYearException(year);
         }
     }
@@ -96,36 +99,29 @@ public class VehicleRegisterController {
      * @param plate Placa do veiculo a ser excluido
      * @param vehicleArray Local onde estao sendo armazenados as instancias dos veiculos
      * @throws LeasedVehicleException Veiculo esta alugado
-     * @throws InvalidPlateSizeException Tamanho da placa invalido
-     * @throws InvalidPlateFormattingException Formatacao da placa invalido
      * @throws VehicleDoesNotExistException Veiculo nao existe no sistema
      * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
      */
-    public void removeVehicle(String reason, String plate, ArrayList<Vehicle> vehicleArray) throws InvalidPlateSizeException, InvalidPlateFormattingException, LeasedVehicleException, VehicleDoesNotExistException, WithoutPermissionException {
+    public void removeVehicle(String reason, String plate, ArrayList<Vehicle> vehicleArray) throws LeasedVehicleException, VehicleDoesNotExistException, WithoutPermissionException {
         try {
 
-            validatePlateSize(plate);
-            validatePlateFormatting(plate);
+            if(!verifyVehicleExistence(plate, vehicleArray)) {
+                throw new VehicleDoesNotExistException(plate);
+            }
             validateVehicleStatus(plate, vehicleArray);
             int positionInArray = getPositionVehicleInArrayByPlate(plate, vehicleArray);
 
             ModelVehicleRegister modelVehicleRegister = new ModelVehicleRegister();
             modelVehicleRegister.removeVehicle(reason, plate, vehicleArray, positionInArray);
-        } catch(InvalidPlateSizeException ipse) {
-            throw ipse;
-        } catch(InvalidPlateFormattingException ipfe) {
-            throw ipfe; 
         } catch(LeasedVehicleException lve) {
-            throw lve; 
-        } catch(VehicleDoesNotExistException vndee) {
-            throw vndee;
+            throw lve;
         } catch(WithoutPermissionException wpe) {
             throw wpe;
         }
     }
 
 /**
-     * Valida se o veiculo esta alugado
+     * Valida se o veiculo esta alugado ou indisponivel
      * Metodo auxiliar para o metodo removeVehicle
      * @param plate Placa do veiculo
      * @param vehicleArray Local onde estao sendo armazenados as instancias dos veiculos
@@ -135,8 +131,10 @@ public class VehicleRegisterController {
         for(Vehicle vehicle : vehicleArray) {            
             if(vehicle.getPlate().equals(plate)) {
                 // String status = vehicle.getStatus().toLowerCase();
-                if(vehicle.getStatus().equals("alugado")) {
-                    throw new LeasedVehicleException(vehicle.getPlate());
+                if(!vehicle.getStatus().equals("disponivel")) {
+                    throw new LeasedVehicleException(vehicle.getPlate(), vehicle.getStatus());
+                } else {
+                    return;
                 }
             }
         }

@@ -1,0 +1,3 @@
+ABC3D41	Fiat	Argo	Preto	2020	Basico	indisponivel - roubo/furto
+ADC3F41	Fiat	Argo	Preto	2000	Basico	disponivel
+ACC3F41	Corolla	Sla	Preto	2000	Basico	disponivel
