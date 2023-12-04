@@ -1,15 +1,9 @@
 package employeeApp.employeeExceptions;
 
 public class ClientAlreadyExistsException extends Exception {
-
-  private int cpf;
-
-  public ClientAlreadyExistsException(int cpf){
-    this.cpf = cpf;
+  public ClientAlreadyExistsException(int cpf) {
+    super();
+    System.out.println("CPF " + cpf + " ja existente no sistema.");
   }
-
-  public String toString(){
-    return "CPF "+ cpf + " ja existente no sistema.";
-  }
-  
 }
+

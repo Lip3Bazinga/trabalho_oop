@@ -93,7 +93,7 @@ public class ModelVehicleRegister {
     }
     
     /**
-     *  Metodo utilizado para inicializar o array de veiculos ao abrir o aplicativo com os dados do txt
+     * Metodo utilizado para inicializar o array de veiculos ao abrir o aplicativo com os dados do txt
      * @return Retorna o array de veiculos com os dados do txt
      * @throws WithoutPermissionException O arquivo nao existe e nao ha permissao para cria-lo
      */
