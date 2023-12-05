@@ -5,8 +5,6 @@ Classe para exceção de formatação da placa invalida (mostrar formatação co
 */
 public class InvalidPlateFormattingException extends Exception {
     public InvalidPlateFormattingException(String plate) {
-        super();
-        System.out.println("Formatacao da placa " + plate + " invalida. Formatacao correta: LLLNLNN.");
-    }
-    
+        super("Formatacao da placa " + plate + " invalida. Formatacao correta: LLLNLNN.");
+    }  
 }
